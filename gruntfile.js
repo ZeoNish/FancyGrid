@@ -343,12 +343,20 @@ module.exports = function (grunt) {
         },
         copy: {
             main: {
-                files: [{
-                    expand: true,
-                    cwd: 'src/images/',
-                    src: ['**'],
-                    dest: 'fancygrid/images/'
-                }],
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'src/images/',
+                        src: ['**'],
+                        dest: 'fancygrid/images/'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'src/js/i18n/',
+                        src: ['**'],
+                        dest: 'fancygrid/modules/i18n/'
+                    }
+                ],
             },
         },
     });
