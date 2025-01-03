@@ -272,6 +272,7 @@
 
       s.calcPages();
       me.onChangeStore(s);
+      w.scroll(0); // WIP
     },
     /*
      *
