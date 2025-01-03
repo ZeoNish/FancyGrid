@@ -1063,6 +1063,8 @@
       me.scrollTop = Math.abs(scrollInfo.newScroll);
       //me.scrollLeft = Math.abs(scrollInfo.scrollLeft);
 
+      me.scrollInfo = scrollInfo;
+
       w.fire('scroll');
 
       return scrollInfo.scrolled;
