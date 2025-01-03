@@ -4,7 +4,7 @@ Build v1.7.180
 
 FancyGrid - JavaScript grid library with charts integration and server communication.
   
-## Install
+## Установка
 
 #### *npm*
 ```
@@ -17,8 +17,8 @@ https://cdn.jsdelivr.net/npm/fancygrid/client/fancy.min.css
 https://cdn.jsdelivr.net/npm/fancygrid/client/fancy.min.js
 ```
 
-## Quick Start
-Include a reference to the FancyGrid library
+## Быстрый старт
+Включите ссылку на библиотеку Fancy Grid
 
 ```html
 <link href="https://cdn.jsdelivr.net/npm/fancygrid/client/fancy.min.css" rel="stylesheet">
@@ -136,15 +136,19 @@ Fancy.MODULESDIR = '/client/modules/';
 Fancy.DEBUG = true;
 ```
 
-## Custom build
-### Debug build
+## Установить grunt локально в проекте
+```
+npm install -g grunt
+```
+
+## Пользовательская сборка
 ```
 grunt debug
 ```
-### Release build
+### Сборка релиза
 ```
 grunt release
 ```
 
 ## Support
-If you need any assistance or would like to report any bugs found in FancyGrid, please contact us at support@fancygrid.com
+Если вам нужна какая-либо помощь или вы хотите сообщить о любых ошибках, обнаруженных в Fancy Grid, пожалуйста, свяжитесь с нами по адресу support@fancygrid.com
