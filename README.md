@@ -138,7 +138,7 @@ Fancy.DEBUG = true;
 
 ## Установить grunt локально в проекте
 ```
-npm install -g grunt
+npm install grunt
 ```
 
 ## Пользовательская сборка
