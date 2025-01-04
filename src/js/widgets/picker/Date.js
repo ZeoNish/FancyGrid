@@ -52,7 +52,7 @@
     height: 299,
     frame: false,
     //panelBorderWidth: 0,
-    i18n: 'en',
+    i18n: Fancy.default.lang,
     cellTrackOver: true,
     cellStylingCls: [PICKER_DATE_CELL_OUT_RANGE_CLS, PICKER_DATE_CELL_TODAY_CLS, PICKER_DATE_CELL_ACTIVE_CLS],
     activeCellCls: PICKER_DATE_CELL_ACTIVE_CLS,

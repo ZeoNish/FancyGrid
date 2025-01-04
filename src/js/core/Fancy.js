@@ -10,7 +10,15 @@ const Fancy = {
    */
   version: '1.7.180',
   site: 'fancygrid.com',
-  COLORS: ['#9DB160', '#B26668', '#4091BA', '#8E658E', '#3B8D8B', '#ff0066', '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#aaeeee']
+  COLORS: ['#9DB160', '#B26668', '#4091BA', '#8E658E', '#3B8D8B', '#ff0066', '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'],
+  /**
+   * Значения по умолчанию
+   * @type Object
+   */
+  default: {
+    lang: 'ru',
+    theme: 'default'
+  }
 };
 
 window.Fancy = Fancy;

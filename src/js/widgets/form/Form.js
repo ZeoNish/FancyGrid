@@ -11,8 +11,8 @@ Fancy.define(['Fancy.Form', 'FancyForm'], {
     'Fancy.form.mixin.PrepareConfig'
   ],
   type: 'form',
-  theme: 'default',
-  i18n: 'en',
+  theme: Fancy.default.theme,
+  i18n: Fancy.default.lang,
   //labelWidth: 100,
   maxLabelNumber: 11,
   minWidth: 200,

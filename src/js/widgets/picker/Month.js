@@ -29,7 +29,7 @@
     frame: false,
     //panelBorderWidth: 0,
     cellHeight: 37,
-    i18n: 'en',
+    i18n: Fancy.default.lang,
     cellTrackOver: true,
     cellStylingCls: [PICKER_MONTH_CELL_ACTIVE_CLS],
     activeCellCls: PICKER_MONTH_CELL_ACTIVE_CLS,
@@ -103,7 +103,7 @@
         return;
       }
 
-      me.lang = F.Object.copy(F.i18n[me.i18n || 'en']);
+      me.lang = F.Object.copy(F.i18n[me.i18n || Fancy.default.lang]);
     },
     /*
      *

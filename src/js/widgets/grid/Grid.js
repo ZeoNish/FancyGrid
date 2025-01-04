@@ -22,8 +22,8 @@ Fancy.define(['Fancy.Grid', 'FancyGrid'], {
     type: 'grid.refreshcolumns'
   }],
   type: 'grid',
-  theme: 'default',
-  i18n: 'en',
+  theme: Fancy.default.theme,
+  i18n: Fancy.default.lang,
   emptyText: '',
   prefix: 'fancy-grid-',
   cls: '',
