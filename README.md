@@ -136,9 +136,9 @@ Fancy.MODULESDIR = '/client/modules/';
 Fancy.DEBUG = true;
 ```
 
-## Установить grunt локально в проекте
+## Установить grunt глобально
 ```
-npm install grunt
+npm install -g grunt
 ```
 
 ## Пользовательская сборка
