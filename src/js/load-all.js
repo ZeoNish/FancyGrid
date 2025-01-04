@@ -51,6 +51,7 @@
         pathToSrc + 'dom/ajax.js', // ajax module
 
         pathToSrc + 'i18n/en.js',
+        pathToSrc + 'i18n/ru.js',
 
         pathToSrc + 'app/Controller.js', //needs to think in what module it should be
 
