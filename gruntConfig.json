@@ -184,6 +184,8 @@
   },{
     "path": "./src/js/i18n/en.js"
   },{
+    "path": "./src/js/i18n/ru.js"
+  },{
     "path": "./src/js/app/Controller.js"
   },{
     "path": "./src/js/dd/DD.js"
