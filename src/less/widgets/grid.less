@@ -22,7 +22,7 @@
 }
 
 .fancy-grid-header-cell-sortable {
-  .fancy-grid-header-cell-text {
+  .fancy-grid-header-cell-container, .fancy-grid-header-cell-text {
     cursor: pointer;
   }
 }
@@ -51,12 +51,13 @@
   text-align: left;
   box-sizing: border-box;
   position: absolute;
+
   &:hover {
     background-color: #eff2f5;
   }
+
   color: #048DC8;
 }
-
 
 
 .fancy-grid-header-cell-container {
@@ -178,9 +179,11 @@
   position: absolute;
   left: 0;
   right: 0;
+
   .fancy-combo-dropdown-button {
     background-position-y: 16px;
   }
+
   .fancy-field-picker-button {
     background-position-y: 8px;
   }
@@ -258,7 +261,7 @@
 .fancy-checkbox-expander .fancy-field-checkbox-input {
   background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%20320%20512%22%3E%3Cpath%20fill%3D%22%23048cc7%22%20d%3D%22M24.707%2038.101L4.908%2057.899c-4.686%204.686-4.686%2012.284%200%2016.971L185.607%20256%204.908%20437.13c-4.686%204.686-4.686%2012.284%200%2016.971L24.707%20473.9c4.686%204.686%2012.284%204.686%2016.971%200l209.414-209.414c4.686-4.686%204.686-12.284%200-16.971L41.678%2038.101c-4.687-4.687-12.285-4.687-16.971%200z%22%2F%3E%3C%2Fsvg%3E');
   width: 17px;
-  height: 18px!important;
+  height: 18px !important;
   background-position: 0;
 }
 
@@ -277,13 +280,16 @@
 
 .fancy-grid-state-resize-column {
   cursor: col-resize !important;
+
   .fancy-grid-header-cell-trigger {
     display: none !important;
   }
+
   .fancy-grid-cell {
     cursor: col-resize !important;
     //background: white;
   }
+
   .fancy-grid-header-cell {
     &:hover {
       background-color: #e3e9ee;
@@ -410,6 +416,7 @@
 .fancy-grid-column-row-drag.fancy-grid-column-ellipsis .fancy-grid-cell {
   text-overflow: initial;
   height: auto;
+
   .fancy-grid-cell-inner-text {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -419,6 +426,7 @@
 
 .fancy-grid-column-select.fancy-grid-column-ellipsis .fancy-grid-cell {
   text-overflow: initial;
+
   .fancy-grid-cell-inner-text {
     overflow: hidden;
     text-overflow: ellipsis;
