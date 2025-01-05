@@ -50,6 +50,7 @@
 
         pathToSrc + 'dom/ajax.js', // ajax module
 
+        // add Lang's
         pathToSrc + 'i18n/en.js',
         pathToSrc + 'i18n/ru.js',
 
