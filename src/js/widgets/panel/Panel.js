@@ -2,558 +2,554 @@
  * @class Fancy.Panel
  * @extends Fancy.Widget
  */
-(function(){
-  //SHORTCUTS
-  const F = Fancy;
+(function () {
+    //SHORTCUTS
+    const F = Fancy;
 
-  /*
-   * CONSTANTS
-   */
-  const HIDDEN_CLS = F.HIDDEN_CLS;
-  const MODAL_CLS = F.MODAL_CLS;
-  const PANEL_CLS = F.PANEL_CLS;
-  const PANEL_HEADER_CLS = F.PANEL_HEADER_CLS;
-  const PANEL_SUB_HEADER_TEXT_CLS = F.PANEL_SUB_HEADER_TEXT_CLS;
-  const PANEL_HEADER_TEXT_CLS = F.PANEL_HEADER_TEXT_CLS;
-  const PANEL_HEADER_TOOLS_CLS = F.PANEL_HEADER_TOOLS_CLS;
-  const PANEL_SUB_HEADER_CLS = F.PANEL_SUB_HEADER_CLS;
-  const PANEL_BODY_CLS = F.PANEL_BODY_CLS;
-  const PANEL_BODY_INNER_CLS = F.PANEL_BODY_INNER_CLS;
-  const PANEL_TBAR_CLS = F.PANEL_TBAR_CLS;
-  const PANEL_SUB_TBAR_CLS = F.PANEL_SUB_TBAR_CLS;
-  const PANEL_BUTTONS_CLS = F.PANEL_BUTTONS_CLS;
-  const PANEL_BBAR_CLS = F.PANEL_BBAR_CLS;
-  const PANEL_HEADER_IMG_CLS = F.PANEL_HEADER_IMG_CLS;
-  const PANEL_NOFRAME_CLS = F.PANEL_NOFRAME_CLS;
-  const PANEL_SHADOW_CLS = F.PANEL_SHADOW_CLS;
-  const PANEL_FOOTER_CLS = F.PANEL_FOOTER_CLS;
-  const FIELD_PICKER_BUTTON_CLS = F.FIELD_PICKER_BUTTON_CLS;
-
-  F.define('Fancy.Panel', {
-    extend: F.Widget,
-    barScrollEnabled: true,
-    tabScrollStep: 80,
-    mixins: [
-      'Fancy.panel.mixin.DD',
-      'Fancy.panel.mixin.Resize'
-    ],
     /*
-     * @param {Object} config
+     * CONSTANTS
      */
-    constructor: function(config){
-      F.apply(this, config);
-      this.Super('constructor', arguments);
-    },
-    /*
-     *
-     */
-    init(){
-      const me = this;
+    const HIDDEN_CLS = F.HIDDEN_CLS;
+    const MODAL_CLS = F.MODAL_CLS;
+    const PANEL_CLS = F.PANEL_CLS;
+    const PANEL_HEADER_CLS = F.PANEL_HEADER_CLS;
+    const PANEL_SUB_HEADER_TEXT_CLS = F.PANEL_SUB_HEADER_TEXT_CLS;
+    const PANEL_HEADER_TEXT_CLS = F.PANEL_HEADER_TEXT_CLS;
+    const PANEL_HEADER_TOOLS_CLS = F.PANEL_HEADER_TOOLS_CLS;
+    const PANEL_SUB_HEADER_CLS = F.PANEL_SUB_HEADER_CLS;
+    const PANEL_BODY_CLS = F.PANEL_BODY_CLS;
+    const PANEL_BODY_INNER_CLS = F.PANEL_BODY_INNER_CLS;
+    const PANEL_TBAR_CLS = F.PANEL_TBAR_CLS;
+    const PANEL_SUB_TBAR_CLS = F.PANEL_SUB_TBAR_CLS;
+    const PANEL_BUTTONS_CLS = F.PANEL_BUTTONS_CLS;
+    const PANEL_BBAR_CLS = F.PANEL_BBAR_CLS;
+    const PANEL_HEADER_IMG_CLS = F.PANEL_HEADER_IMG_CLS;
+    const PANEL_NOFRAME_CLS = F.PANEL_NOFRAME_CLS;
+    const PANEL_SHADOW_CLS = F.PANEL_SHADOW_CLS;
+    const PANEL_FOOTER_CLS = F.PANEL_FOOTER_CLS;
+    const FIELD_PICKER_BUTTON_CLS = F.FIELD_PICKER_BUTTON_CLS;
 
-      me.Super('init', arguments);
-      me.addEvents('resize');
+    F.define('Fancy.Panel', {
+        extend: F.Widget,
+        barScrollEnabled: true,
+        tabScrollStep: 80,
+        mixins: [
+            'Fancy.panel.mixin.DD',
+            'Fancy.panel.mixin.Resize'
+        ],
+        /*
+         * @param {Object} config
+         */
+        constructor: function (config) {
+            F.apply(this, config);
+            this.Super('constructor', arguments);
+        },
+        /*
+         *
+         */
+        init() {
+            const me = this;
 
-      me.initTpl();
-      me.render();
+            me.Super('init', arguments);
+            me.addEvents('resize');
 
-      if (me.draggable) {
-        me.initDD();
-      }
+            me.initTpl();
+            me.render();
 
-      if (me.resizable) {
-        me.initResize();
-      }
+            if (me.draggable) {
+                me.initDD();
+            }
 
-      if (me.window) {
-        me.setActiveWindowWatcher();
-      }
-    },
-    cls: '',
-    fieldCls: PANEL_CLS,
-    value: '',
-    width: 300,
-    height: 200,
-    titleHeight: 30,
-    subTitleHeight: 30,
-    barHeight: 37,
-    title: undefined,
-    frame: true,
-    shadow: true,
-    draggable: false,
-    minWidth: 200,
-    minHeight: 200,
-    barContainer: true,
-    theme: 'default',
-    tpl: [
-      '<div style="height:{titleHeight}px;" class="'+PANEL_HEADER_CLS+' '+HIDDEN_CLS+'">',
-        '{titleImg}',
-        '<div class="' + PANEL_HEADER_TEXT_CLS + '">{title}</div>',
-        '<div class="' + PANEL_HEADER_TOOLS_CLS + '"></div>',
-      '</div>',
-      '<div style="height:{subTitleHeight}px;" class="' + PANEL_SUB_HEADER_CLS + ' '+HIDDEN_CLS+'">',
-        '<div class="' + PANEL_SUB_HEADER_TEXT_CLS + '">{subTitle}</div>',
-      '</div>',
-      '<div class="' + PANEL_BODY_CLS + '">',
-        '<div class="' + PANEL_TBAR_CLS + ' '+HIDDEN_CLS+'" style="height:{tbarHeight}px;"></div>',
-        '<div class="' + PANEL_SUB_TBAR_CLS + ' '+HIDDEN_CLS+'" style="height:{subTBarHeight}px;"></div>',
-        '<div class="' + PANEL_BODY_INNER_CLS + '"></div>',
-        '<div class="' + PANEL_BBAR_CLS + ' '+HIDDEN_CLS+'" style="height:{bbarHeight}px;"></div>',
-        '<div class="' + PANEL_BUTTONS_CLS + ' '+HIDDEN_CLS+'" style="height:{buttonsHeight}px;"></div>',
-        '<div class="' + PANEL_FOOTER_CLS + ' '+HIDDEN_CLS+'" style="height:{barHeight}px;"></div>',
-      '</div>'
-    ],
-    /*
-     *
-     */
-    render(){
-      var me = this,
-        renderTo = F.get(me.renderTo || document.body),
-        el = F.newEl('div'),
-        minusHeight = 0,
-        titleHeight = me.titleHeight,
-        subTitleHeight = me.subTitleHeight;
+            if (me.resizable) {
+                me.initResize();
+            }
 
-      if (me.renderOuter) {
-        el = renderTo;
-      }
+            if (me.window) {
+                me.setActiveWindowWatcher();
+            }
+        },
+        cls: '',
+        fieldCls: PANEL_CLS,
+        value: '',
+        width: 300,
+        height: 200,
+        titleHeight: 30,
+        subTitleHeight: 30,
+        barHeight: 37,
+        title: undefined,
+        frame: true,
+        shadow: true,
+        draggable: false,
+        minWidth: 200,
+        minHeight: 200,
+        barContainer: true,
+        theme: 'default',
+        tpl: [
+            '<div style="height:{titleHeight}px;" class="' + PANEL_HEADER_CLS + ' ' + HIDDEN_CLS + '">',
+            '{titleImg}',
+            '<div class="' + PANEL_HEADER_TEXT_CLS + '">{title}</div>',
+            '<div class="' + PANEL_HEADER_TOOLS_CLS + '"></div>',
+            '</div>',
+            '<div style="height:{subTitleHeight}px;" class="' + PANEL_SUB_HEADER_CLS + ' ' + HIDDEN_CLS + '">',
+            '<div class="' + PANEL_SUB_HEADER_TEXT_CLS + '">{subTitle}</div>',
+            '</div>',
+            '<div class="' + PANEL_BODY_CLS + '">',
+            '<div class="' + PANEL_TBAR_CLS + ' ' + HIDDEN_CLS + '" style="height:{tbarHeight}px;"></div>',
+            '<div class="' + PANEL_SUB_TBAR_CLS + ' ' + HIDDEN_CLS + '" style="height:{subTBarHeight}px;"></div>',
+            '<div class="' + PANEL_BODY_INNER_CLS + '"></div>',
+            '<div class="' + PANEL_BBAR_CLS + ' ' + HIDDEN_CLS + '" style="height:{bbarHeight}px;"></div>',
+            '<div class="' + PANEL_BUTTONS_CLS + ' ' + HIDDEN_CLS + '" style="height:{buttonsHeight}px;"></div>',
+            '<div class="' + PANEL_FOOTER_CLS + ' ' + HIDDEN_CLS + '" style="height:{barHeight}px;"></div>',
+            '</div>'
+        ],
+        /*
+         *
+         */
+        render() {
+            var me = this,
+                renderTo = F.get(me.renderTo || document.body),
+                el = F.newEl('div'),
+                minusHeight = 0,
+                titleHeight = me.titleHeight,
+                subTitleHeight = me.subTitleHeight;
 
-      if (!renderTo.dom) {
-        F.error(`Could not find renderTo element: ${me.renderTo}`, 1);
-      }
+            if (me.renderOuter) {
+                el = renderTo;
+            }
 
-      if (me.window === true) {
-        el.css({
-          display: 'none',
-          position: 'absolute'
-        });
-      }
+            if (!renderTo.dom) {
+                F.error(`Could not find renderTo element: ${me.renderTo}`, 1);
+            }
 
-      if (me.frame === false) {
-        el.addCls(PANEL_NOFRAME_CLS);
-      }
+            if (me.window === true) {
+                el.css({
+                    display: 'none',
+                    position: 'absolute'
+                });
+            }
 
-      el.addCls(F.cls, me.cls, me.fieldCls);
-      if (me.theme !== 'default') {
-        el.addCls(Fancy.getThemeCSSCls(me.theme));
-      }
+            if (me.frame === false) {
+                el.addCls(PANEL_NOFRAME_CLS);
+            }
 
-      if (me.shadow) {
-        el.addCls(PANEL_SHADOW_CLS);
-      }
+            el.addCls(F.cls, me.cls, me.fieldCls);
+            if (me.theme !== 'default') {
+                el.addCls(Fancy.getThemeCSSCls(me.theme));
+            }
 
-      el.css({
-        width: `${me.width}px`,
-        height: (me.height - minusHeight) + 'px'
-      });
+            if (me.shadow) {
+                el.addCls(PANEL_SHADOW_CLS);
+            }
 
-      if (me.style) {
-        el.css(me.style);
-      }
+            el.css({
+                width: `${me.width}px`,
+                height: (me.height - minusHeight) + 'px' // Тут высота
+            });
 
-      let titleText = '',
-        subTitleText = '';
+            if (me.style) {
+                el.css(me.style);
+            }
 
-      if (F.isObject(me.title)) {
-        titleText = me.title.text;
-      }
-      else if (F.isString(me.title)) {
-        titleText = me.title;
-      }
+            let titleText = '',
+                subTitleText = '';
 
-      if (F.isObject(me.subTitle)) {
-        subTitleText = me.subTitle.text;
-      }
-      else if (F.isString(me.subTitle)) {
-        subTitleText = me.subTitle;
-      }
+            if (F.isObject(me.title)) {
+                titleText = me.title.text;
+            } else if (F.isString(me.title)) {
+                titleText = me.title;
+            }
 
-      let imgCls = '';
+            if (F.isObject(me.subTitle)) {
+                subTitleText = me.subTitle.text;
+            } else if (F.isString(me.subTitle)) {
+                subTitleText = me.subTitle;
+            }
 
-      if (F.isObject(me.title) && me.title.imgCls) {
-        imgCls = `<div class="${PANEL_HEADER_IMG_CLS} ${me.title.imgCls}"></div>`;
-      }
+            let imgCls = '';
 
-      el.update(me.tpl.getHTML({
-        titleImg: imgCls,
-        barHeight: me.barHeight,
-        subTBarHeight: me.subTBarHeight || me.barHeight,
-        tbarHeight: me.tbarHeight || me.barHeight,
-        bbarHeight: me.bbarHeight || me.barHeight,
-        buttonsHeight: me.buttonsHeight || me.barHeight,
-        titleHeight: titleHeight,
-        subTitleHeight: subTitleHeight,
-        title: titleText,
-        subTitle: subTitleText
-      }));
+            if (F.isObject(me.title) && me.title.imgCls) {
+                imgCls = `<div class="${PANEL_HEADER_IMG_CLS} ${me.title.imgCls}"></div>`;
+            }
 
-      if (F.isObject(me.title)) {
-        if (me.title.style) {
-          el.select(`.${PANEL_HEADER_CLS}`).css(me.title.style);
+            el.update(me.tpl.getHTML({
+                titleImg: imgCls,
+                barHeight: me.barHeight,
+                subTBarHeight: me.subTBarHeight || me.barHeight,
+                tbarHeight: me.tbarHeight || me.barHeight,
+                bbarHeight: me.bbarHeight || me.barHeight,
+                buttonsHeight: me.buttonsHeight || me.barHeight,
+                titleHeight: titleHeight,
+                subTitleHeight: subTitleHeight,
+                title: titleText,
+                subTitle: subTitleText
+            }));
+
+            if (F.isObject(me.title)) {
+                if (me.title.style) {
+                    el.select(`.${PANEL_HEADER_CLS}`).css(me.title.style);
+                }
+
+                if (me.title.cls) {
+                    el.select(`.${PANEL_HEADER_CLS}`).addCls(me.title.cls);
+                }
+
+                if (me.title.tools) {
+                    me.tools = me.title.tools;
+                }
+            }
+
+            if (F.isObject(me.subTitle)) {
+                if (me.subTitle.style) {
+                    el.select(`.${PANEL_SUB_HEADER_CLS}`).css(me.subTitle.style);
+                }
+
+                if (me.subTitle.cls) {
+                    el.select(`.${PANEL_SUB_HEADER_CLS}`).addCls(me.subTitle.cls);
+                }
+            }
+
+            if (me.title) {
+                el.select(`.${PANEL_HEADER_CLS}`).removeCls(HIDDEN_CLS);
+            } else {
+                el.select(`.${PANEL_BODY_CLS}`).css('border-top-width', '0px');
+            }
+
+            if (me.subTitle) {
+                el.select(`.${PANEL_BODY_CLS}`).css('border-top-width', '0px');
+                el.select(`.${PANEL_SUB_HEADER_CLS}`).removeCls(HIDDEN_CLS);
+            }
+
+            if (me.tbar) {
+                el.select(`.${PANEL_TBAR_CLS}`).removeCls(HIDDEN_CLS);
+            }
+
+            if (me.subTBar) {
+                el.select(`.${PANEL_SUB_TBAR_CLS}`).removeCls(HIDDEN_CLS);
+            }
+
+            if (me.bbar) {
+                el.select(`.${PANEL_BBAR_CLS}`).removeCls(HIDDEN_CLS);
+            }
+
+            if (me.buttons) {
+                el.select(`.${PANEL_BUTTONS_CLS}`).removeCls(HIDDEN_CLS);
+            }
+
+            if (me.footer) {
+                el.select(`.${PANEL_FOOTER_CLS}`).removeCls(HIDDEN_CLS);
+            }
+
+            if (me.renderOuter) {
+                me.el = el;
+            } else {
+                me.el = renderTo.dom.appendChild(el.dom);
+                me.el = F.get(me.el);
+            }
+
+            if (me.modal) {
+                if (F.select(MODAL_CLS).length === 0) {
+                    F.get(document.body).append(`<div class="${MODAL_CLS}" style="display: none;"></div>`);
+                }
+            }
+
+            if (me.id && !me.el.attr('id')) {
+                me.el.attr('id', me.id);
+            }
+
+            me.renderTools();
+            me.renderBars();
+
+            me.setHardBordersWidth();
+        },
+        /*
+         *
+         */
+        setHardBordersWidth() {
+            const panelBodyBorders = this.panelBodyBorders;
+
+            this.el.select(`.${PANEL_BODY_CLS}`).css({
+                'border-top-width': panelBodyBorders[0],
+                'border-right-width': panelBodyBorders[1],
+                'border-bottom-width': panelBodyBorders[2],
+                'border-left-width': panelBodyBorders[3]
+            });
+        },
+        /*
+         *
+         */
+        renderTools() {
+            const me = this,
+                tools = me.tools;
+
+            if (tools === undefined) {
+                return;
+            }
+
+            F.each(tools, function (tool, i) {
+                tool.renderTo = me.el.select(`.${PANEL_HEADER_TOOLS_CLS}`).dom;
+                me.tools[i] = new F.Tool(tool, me.scope || me);
+            });
+        },
+        /*
+         *
+         */
+        renderBars() {
+            var me = this,
+                containsGrid = false,
+                theme = me.theme,
+                scope = this;
+
+            if (me.items && me.items[0]) {
+                if (me.items[0].type === 'grid') {
+                    containsGrid = true;
+                }
+
+                scope = me.items[0];
+            }
+
+            if (me.bbar) {
+                me._bbar = new F.Bar({
+                    el: me.el.select(`.${PANEL_BBAR_CLS}`),
+                    items: me.bbar,
+                    height: me.bbarHeight || me.barHeight,
+                    barContainer: me.barContainer,
+                    barScrollEnabled: me.barScrollEnabled,
+                    tabScrollStep: me.tabScrollStep,
+                    hidden: me.bbarHidden === true,
+                    scope: scope,
+                    theme: theme,
+                    i18n: this.i18n
+                });
+
+                me.bbar = me._bbar.items;
+            }
+
+            if (me.buttons) {
+                me._buttons = new F.Bar({
+                    el: me.el.select(`.${PANEL_BUTTONS_CLS}`),
+                    items: me.buttons,
+                    height: me.buttonsHeight || me.barHeight,
+                    barScrollEnabled: me.barScrollEnabled,
+                    tabScrollStep: me.tabScrollStep,
+                    hidden: me.buttonsHidden === true,
+                    scope: scope,
+                    theme: theme
+                });
+
+                me.buttons = me._buttons.items;
+            }
+
+            if (me.tbar) {
+                me._tbar = new F.Bar({
+                    el: me.el.select(`.${PANEL_TBAR_CLS}`),
+                    items: me.tbar,
+                    height: me.tbarHeight || me.barHeight,
+                    tabEdit: !me.subTBar && containsGrid,
+                    barScrollEnabled: me.barScrollEnabled,
+                    tabScrollStep: me.tabScrollStep,
+                    hidden: me.tbarHidden === true,
+                    scope: scope,
+                    theme: theme
+                });
+
+                me.tbar = me._tbar.items;
+            }
+
+            if (me.subTBar) {
+                me._subTBar = new F.Bar({
+                    el: me.el.select(`.${PANEL_SUB_TBAR_CLS}`),
+                    items: me.subTBar,
+                    height: me.subTBarHeight || me.barHeight,
+                    tabEdit: containsGrid,
+                    barScrollEnabled: me.barScrollEnabled,
+                    tabScrollStep: me.tabScrollStep,
+                    hidden: me.subTBarHidden === true,
+                    scope: scope,
+                    theme: theme
+                });
+
+                me.subTBar = me._subTBar.items;
+            }
+
+            if (me.footer) {
+                me._footer = new F.Bar({
+                    disableScroll: true,
+                    el: me.el.select(`.${PANEL_FOOTER_CLS}`),
+                    items: me.footer,
+                    height: me.barHeight,
+                    barScrollEnabled: me.barScrollEnabled,
+                    tabScrollStep: me.tabScrollStep,
+                    scope: scope,
+                    theme: theme,
+                    isFooter: true
+                });
+
+                me.footer = me._footer.items;
+            }
+        },
+        /*
+         * @param {Number} x
+         * @param {Number} y
+         */
+        showAt(x, y) {
+            this.css({
+                left: `${x}px`,
+                display: '',
+                'z-index': 1000 + F.zIndex++
+            });
+
+            if (y !== undefined) {
+                this.css({
+                    top: y + 'px'
+                });
+            }
+        },
+        /*
+         *
+         */
+        show() {
+            const me = this;
+
+            me.el.show();
+
+            if (me.window !== true) {
+                return;
+            }
+
+            if (me.buttons) {
+                me._buttons.checkScroll();
+            }
+
+            if (me.tbar) {
+                me._tbar.checkScroll();
+            }
+
+            if (me.bbar) {
+                me._bbar.checkScroll();
+            }
+
+            if (me.subTBar) {
+                me._subTBar.checkScroll();
+            }
+
+            const viewSize = F.getViewSize(),
+                height = me.el.height(),
+                width = me.el.width(),
+                xy = [],
+                scroll = F.getScroll(),
+                scrollTop = scroll[0],
+                scrollLeft = scroll[1];
+
+            xy[0] = (viewSize[1] - width) / 2;
+            xy[1] = (viewSize[0] - height) / 2;
+
+            if (xy[0] < 10) {
+                xy[0] = 10;
+            }
+
+            if (xy[1] < 10) {
+                xy[1] = 10;
+            }
+
+            me.css({
+                left: (xy[0] + scrollLeft) + 'px',
+                top: (xy[1] + scrollTop) + 'px',
+                display: '',
+                'z-index': 1000 + F.zIndex++
+            });
+
+            if (me.modal) {
+                F.select(`.${MODAL_CLS}`).css({
+                    'display': '',
+                    'z-index': 1000 + F.zIndex - 2
+                });
+            }
+        },
+        /*
+         *
+         */
+        hide() {
+            const me = this;
+
+            me.css({
+                display: 'none'
+            });
+
+            if (me.modal) {
+                F.select(`.${MODAL_CLS}`).css('display', 'none');
+            }
+
+            F.each(this.items || [], (item) => {
+                if (item.type === 'combo') {
+                    item.hideList();
+                }
+            });
+        },
+        /*
+         * @param {String} value
+         */
+        setTitle(value) {
+            this.el.select(`.${PANEL_HEADER_TEXT_CLS}`).update(value);
+        },
+        /*
+         * @return {String}
+         */
+        getTitle() {
+            return this.el.select(`.${PANEL_HEADER_TEXT_CLS}`).dom.innerHTML;
+        },
+        /*
+         * @param {String} value
+         */
+        setSubTitle(value) {
+            this.el.select(`.${PANEL_SUB_HEADER_TEXT_CLS}`).update(value);
+        },
+        /*
+         * @return {String}
+         */
+        getSubTitle() {
+            return this.el.select(`.${PANEL_SUB_HEADER_TEXT_CLS}`).dom.innerHTML;
+        },
+        /*
+         * @return {Number}
+         */
+        getHeight() {
+            return parseInt(this.css('height'));
+        },
+        /*
+         * @param {String} value
+         */
+        setWidth(value) {
+            //TODO: Redo
+            this.items[0].setWidth(value);
+        },
+        /*
+         * @param {Number} value
+         */
+        setHeight(value) {
+            this.css('height', value);
+            this.items[0].setHeight(value, false);
+        },
+        /*
+         *
+         */
+        setActiveWindowWatcher() {
+            const me = this;
+
+            me.el.on('mousedown', function (e) {
+                const targetEl = F.get(e.target);
+
+                if (targetEl.hasCls(FIELD_PICKER_BUTTON_CLS)) {
+                    return;
+                }
+
+                if (1000 + F.zIndex - 1 > parseInt(me.css('z-index'))) {
+                    me.css('z-index', 1000 + F.zIndex++);
+                }
+
+                F.get(document.body).select('.fancy-active-panel').removeCls('fancy-active-panel');
+                me.el.addCls('fancy-active-panel');
+            });
         }
-
-        if (me.title.cls) {
-          el.select(`.${PANEL_HEADER_CLS}`).addCls(me.title.cls);
-        }
-
-        if (me.title.tools) {
-          me.tools = me.title.tools;
-        }
-      }
-
-      if (F.isObject(me.subTitle)) {
-        if (me.subTitle.style) {
-          el.select(`.${PANEL_SUB_HEADER_CLS}`).css(me.subTitle.style);
-        }
-
-        if (me.subTitle.cls) {
-          el.select(`.${PANEL_SUB_HEADER_CLS}`).addCls(me.subTitle.cls);
-        }
-      }
-
-      if (me.title) {
-        el.select(`.${PANEL_HEADER_CLS}`).removeCls(HIDDEN_CLS);
-      }
-      else {
-        el.select(`.${PANEL_BODY_CLS}`).css('border-top-width', '0px');
-      }
-
-      if (me.subTitle) {
-        el.select(`.${PANEL_BODY_CLS}`).css('border-top-width', '0px');
-        el.select(`.${PANEL_SUB_HEADER_CLS}`).removeCls(HIDDEN_CLS);
-      }
-
-      if (me.tbar) {
-        el.select(`.${PANEL_TBAR_CLS}`).removeCls(HIDDEN_CLS);
-      }
-
-      if (me.subTBar) {
-        el.select(`.${PANEL_SUB_TBAR_CLS}`).removeCls(HIDDEN_CLS);
-      }
-
-      if (me.bbar) {
-        el.select(`.${PANEL_BBAR_CLS}`).removeCls(HIDDEN_CLS);
-      }
-
-      if (me.buttons) {
-        el.select(`.${PANEL_BUTTONS_CLS}`).removeCls(HIDDEN_CLS);
-      }
-
-      if (me.footer) {
-        el.select(`.${PANEL_FOOTER_CLS}`).removeCls(HIDDEN_CLS);
-      }
-
-      if (me.renderOuter) {
-        me.el = el;
-      }
-      else {
-        me.el = renderTo.dom.appendChild(el.dom);
-        me.el = F.get(me.el);
-      }
-
-      if (me.modal) {
-        if (F.select(MODAL_CLS).length === 0) {
-          F.get(document.body).append(`<div class="${MODAL_CLS}" style="display: none;"></div>`);
-        }
-      }
-
-      if (me.id && !me.el.attr('id')) {
-        me.el.attr('id', me.id);
-      }
-
-      me.renderTools();
-      me.renderBars();
-
-      me.setHardBordersWidth();
-    },
-    /*
-     *
-     */
-    setHardBordersWidth(){
-      const panelBodyBorders = this.panelBodyBorders;
-
-      this.el.select(`.${PANEL_BODY_CLS}`).css({
-        'border-top-width': panelBodyBorders[0],
-        'border-right-width': panelBodyBorders[1],
-        'border-bottom-width': panelBodyBorders[2],
-        'border-left-width': panelBodyBorders[3]
-      });
-    },
-    /*
-     *
-     */
-    renderTools(){
-      const me = this,
-        tools = me.tools;
-
-      if (tools === undefined) {
-        return;
-      }
-
-      F.each(tools, function(tool, i){
-        tool.renderTo = me.el.select(`.${PANEL_HEADER_TOOLS_CLS}`).dom;
-        me.tools[i] = new F.Tool(tool, me.scope || me);
-      });
-    },
-    /*
-     *
-     */
-    renderBars(){
-      var me = this,
-        containsGrid = false,
-        theme = me.theme,
-        scope = this;
-
-      if (me.items && me.items[0]) {
-        if (me.items[0].type === 'grid') {
-          containsGrid = true;
-        }
-
-        scope = me.items[0];
-      }
-
-      if (me.bbar) {
-        me._bbar = new F.Bar({
-          el: me.el.select(`.${PANEL_BBAR_CLS}`),
-          items: me.bbar,
-          height: me.bbarHeight || me.barHeight,
-          barContainer: me.barContainer,
-          barScrollEnabled: me.barScrollEnabled,
-          tabScrollStep: me.tabScrollStep,
-          hidden: me.bbarHidden === true,
-          scope: scope,
-          theme: theme,
-          i18n: this.i18n
-        });
-
-        me.bbar = me._bbar.items;
-      }
-
-      if (me.buttons) {
-        me._buttons = new F.Bar({
-          el: me.el.select(`.${PANEL_BUTTONS_CLS}`),
-          items: me.buttons,
-          height: me.buttonsHeight || me.barHeight,
-          barScrollEnabled: me.barScrollEnabled,
-          tabScrollStep: me.tabScrollStep,
-          hidden: me.buttonsHidden === true,
-          scope: scope,
-          theme: theme
-        });
-
-        me.buttons = me._buttons.items;
-      }
-
-      if (me.tbar) {
-        me._tbar = new F.Bar({
-          el: me.el.select(`.${PANEL_TBAR_CLS}`),
-          items: me.tbar,
-          height: me.tbarHeight || me.barHeight,
-          tabEdit: !me.subTBar && containsGrid,
-          barScrollEnabled: me.barScrollEnabled,
-          tabScrollStep: me.tabScrollStep,
-          hidden: me.tbarHidden === true,
-          scope: scope,
-          theme: theme
-        });
-
-        me.tbar = me._tbar.items;
-      }
-
-      if (me.subTBar) {
-        me._subTBar = new F.Bar({
-          el: me.el.select(`.${PANEL_SUB_TBAR_CLS}`),
-          items: me.subTBar,
-          height:  me.subTBarHeight || me.barHeight,
-          tabEdit: containsGrid,
-          barScrollEnabled: me.barScrollEnabled,
-          tabScrollStep: me.tabScrollStep,
-          hidden: me.subTBarHidden === true,
-          scope: scope,
-          theme: theme
-        });
-
-        me.subTBar = me._subTBar.items;
-      }
-
-      if (me.footer) {
-        me._footer = new F.Bar({
-          disableScroll: true,
-          el: me.el.select(`.${PANEL_FOOTER_CLS}`),
-          items: me.footer,
-          height: me.barHeight,
-          barScrollEnabled: me.barScrollEnabled,
-          tabScrollStep: me.tabScrollStep,
-          scope: scope,
-          theme: theme,
-          isFooter: true
-        });
-
-        me.footer = me._footer.items;
-      }
-    },
-    /*
-     * @param {Number} x
-     * @param {Number} y
-     */
-    showAt(x, y){
-      this.css({
-        left: `${x}px`,
-        display: '',
-        'z-index': 1000 + F.zIndex++
-      });
-
-      if (y !== undefined) {
-        this.css({
-          top: y + 'px'
-        });
-      }
-    },
-    /*
-     *
-     */
-    show(){
-      const me = this;
-
-      me.el.show();
-
-      if (me.window !== true) {
-        return;
-      }
-
-      if (me.buttons) {
-        me._buttons.checkScroll();
-      }
-
-      if (me.tbar) {
-        me._tbar.checkScroll();
-      }
-
-      if (me.bbar) {
-        me._bbar.checkScroll();
-      }
-
-      if (me.subTBar) {
-        me._subTBar.checkScroll();
-      }
-
-      const viewSize = F.getViewSize(),
-        height = me.el.height(),
-        width = me.el.width(),
-        xy = [],
-        scroll = F.getScroll(),
-        scrollTop = scroll[0],
-        scrollLeft = scroll[1];
-
-      xy[0] = (viewSize[1] - width) / 2;
-      xy[1] = (viewSize[0] - height) / 2;
-
-      if (xy[0] < 10) {
-        xy[0] = 10;
-      }
-
-      if (xy[1] < 10) {
-        xy[1] = 10;
-      }
-
-      me.css({
-        left: (xy[0] + scrollLeft) + 'px',
-        top: (xy[1] + scrollTop) + 'px',
-        display: '',
-        'z-index': 1000 + F.zIndex++
-      });
-
-      if (me.modal) {
-        F.select(`.${MODAL_CLS}`).css({
-          'display': '',
-          'z-index': 1000 + F.zIndex - 2
-        });
-      }
-    },
-    /*
-     *
-     */
-    hide(){
-      const me = this;
-
-      me.css({
-        display: 'none'
-      });
-
-      if (me.modal) {
-        F.select(`.${MODAL_CLS}`).css('display', 'none');
-      }
-
-      F.each(this.items || [], (item) => {
-        if (item.type === 'combo') {
-          item.hideList();
-        }
-      });
-    },
-    /*
-     * @param {String} value
-     */
-    setTitle(value){
-      this.el.select(`.${PANEL_HEADER_TEXT_CLS}`).update(value);
-    },
-    /*
-     * @return {String}
-     */
-    getTitle(){
-      return this.el.select(`.${PANEL_HEADER_TEXT_CLS}`).dom.innerHTML;
-    },
-    /*
-     * @param {String} value
-     */
-    setSubTitle(value){
-      this.el.select(`.${PANEL_SUB_HEADER_TEXT_CLS}`).update(value);
-    },
-    /*
-     * @return {String}
-     */
-    getSubTitle(){
-      return this.el.select(`.${PANEL_SUB_HEADER_TEXT_CLS}`).dom.innerHTML;
-    },
-    /*
-     * @return {Number}
-     */
-    getHeight(){
-      return parseInt(this.css('height'));
-    },
-    /*
-     * @param {String} value
-     */
-    setWidth(value){
-      //TODO: Redo
-      this.items[0].setWidth(value);
-    },
-    /*
-     * @param {Number} value
-     */
-    setHeight(value){
-      this.css('height', value);
-      this.items[0].setHeight(value, false);
-    },
-    /*
-     *
-     */
-    setActiveWindowWatcher(){
-      const me = this;
-
-      me.el.on('mousedown', function(e){
-        const targetEl = F.get(e.target);
-
-        if (targetEl.hasCls(FIELD_PICKER_BUTTON_CLS)) {
-          return;
-        }
-
-        if (1000 + F.zIndex - 1 > parseInt(me.css('z-index'))) {
-          me.css('z-index', 1000 + F.zIndex++);
-        }
-
-        F.get(document.body).select('.fancy-active-panel').removeCls('fancy-active-panel');
-        me.el.addCls('fancy-active-panel');
-      });
-    }
-  });
+    });
 
 })();
