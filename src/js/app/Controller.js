@@ -5,7 +5,7 @@ Fancy.controllers = {};
  * @param {Object} o
  */
 Fancy.defineController = (name, o) => {
-  Fancy.controllers[name] = o;
+    Fancy.controllers[name] = o;
 };
 
 Fancy.defineControl = Fancy.defineController;
@@ -15,7 +15,7 @@ Fancy.defineControl = Fancy.defineController;
  * @return {Object}
  */
 Fancy.getController = (name) => {
-  return Fancy.controllers[name];
+    return Fancy.controllers[name];
 };
 
 Fancy.getControl = Fancy.getController;

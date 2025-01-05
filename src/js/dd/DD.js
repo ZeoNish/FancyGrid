@@ -4,92 +4,92 @@
  * @extends Fancy.Event
  */
 Fancy.define('Fancy.DD', {
-  extend: Fancy.Event,
-  singleton: true,
-  /*
-   * @constructor
-   * @param {Object} config
-   */
-  constructor: function(){
-    this.Super('const', arguments);
-    this.init();
-  },
-  /*
-   *
-   */
-  init(){
-    this.addEvents();
-    this.els = {};
-  },
-  /*
-   * @param {Object} o
-   */
-  add(o){
-    const me = this,
-      id = Fancy.id(o.overEl);
-
+    extend: Fancy.Event,
+    singleton: true,
     /*
-      {
-        dragEl: El,
-        overEl: El
-      }
-    */
+     * @constructor
+     * @param {Object} config
+     */
+    constructor: function () {
+        this.Super('const', arguments);
+        this.init();
+    },
+    /*
+     *
+     */
+    init() {
+        this.addEvents();
+        this.els = {};
+    },
+    /*
+     * @param {Object} o
+     */
+    add(o) {
+        const me = this,
+            id = Fancy.id(o.overEl);
 
-    me.els[id] = o;
-    //o.dragEl.on('mousedown', me.onMouseDown, me);
-    o.overEl.on('mousedown', me.onMouseDown, me);
-  },
-  /*
-   * @param {Object} e
-   */
-  onMouseDown(e){
-    const me = this,
-      doc = Fancy.get(document),
-      overEl = Fancy.get(e.currentTarget),
-      dragEl = me.els[overEl.attr('id')].dragEl;
+        /*
+          {
+            dragEl: El,
+            overEl: El
+          }
+        */
 
-    e.preventDefault();
+        me.els[id] = o;
+        //o.dragEl.on('mousedown', me.onMouseDown, me);
+        o.overEl.on('mousedown', me.onMouseDown, me);
+    },
+    /*
+     * @param {Object} e
+     */
+    onMouseDown(e) {
+        const me = this,
+            doc = Fancy.get(document),
+            overEl = Fancy.get(e.currentTarget),
+            dragEl = me.els[overEl.attr('id')].dragEl;
 
-    me.clientX = e.clientX;
-    me.clientY = e.clientY;
+        e.preventDefault();
 
-    me.startX = parseInt(dragEl.css('left'));
-    me.startY = parseInt(dragEl.css('top'));
+        me.clientX = e.clientX;
+        me.clientY = e.clientY;
 
-    me.activeId = overEl.attr('id');
+        me.startX = parseInt(dragEl.css('left'));
+        me.startY = parseInt(dragEl.css('top'));
 
-    doc.once('mouseup', me.onMouseUp, me);
-    doc.on('mousemove', me.onMouseMove, me);
-  },
-  /*
-   *
-   */
-  onMouseUp(){
-    const doc = Fancy.get(document);
+        me.activeId = overEl.attr('id');
 
-    doc.un('mousemove', this.onMouseMove, this);
-  },
-  /*
-   * @param {Object} e
-   */
-  onMouseMove(e){
-    var me = this,
-      activeO = me.els[me.activeId],
-      dragEl = activeO.dragEl,
-      clientX = e.clientX,
-      clientY = e.clientY,
-      deltaX = me.clientX - clientX,
-      deltaY = me.clientY - clientY,
-      left = me.startX - deltaX,
-      top = me.startY - deltaY;
+        doc.once('mouseup', me.onMouseUp, me);
+        doc.on('mousemove', me.onMouseMove, me);
+    },
+    /*
+     *
+     */
+    onMouseUp() {
+        const doc = Fancy.get(document);
 
-    if (top < 0) {
-      top = 0;
+        doc.un('mousemove', this.onMouseMove, this);
+    },
+    /*
+     * @param {Object} e
+     */
+    onMouseMove(e) {
+        var me = this,
+            activeO = me.els[me.activeId],
+            dragEl = activeO.dragEl,
+            clientX = e.clientX,
+            clientY = e.clientY,
+            deltaX = me.clientX - clientX,
+            deltaY = me.clientY - clientY,
+            left = me.startX - deltaX,
+            top = me.startY - deltaY;
+
+        if (top < 0) {
+            top = 0;
+        }
+
+        dragEl.css({
+            left,
+            top
+        });
     }
-
-    dragEl.css({
-      left,
-      top
-    });
-  }
 });
